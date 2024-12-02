@@ -35,7 +35,7 @@ async function cadastrarFuncionario(req, res) {
       return res.status(400).json({ message: 'Email já em uso. Por favor, escolha outro email.' });
     }
 
-    const sql = 'insert into funcionarios (nome, email, quantidade_vendas) VALUES (?, ?, 0)';
+    const sql = 'insert into microservico_login (nome, email, quantidade_vendas) VALUES (?, ?, 0)';
     await db.query(sql, [nome, email]);
 
     return res.status(201).json({ message: 'Funcionário cadastrado com sucesso!' });
@@ -55,7 +55,7 @@ async function atualizarFuncionario(req, res) {
       return res.status(404).json({ message: 'Funcionário não encontrado.' });
     }
 
-    const sql = 'update funcionarios set nome = ?, email = ? where email = ?';
+    const sql = 'update microservico_login set nome = ?, email = ? where email = ?';
     await db.query(sql, [nome, novoEmail || email, email]);
 
     res.status(200).json({ message: 'Funcionário atualizado com sucesso.' });
