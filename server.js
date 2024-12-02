@@ -1,36 +1,15 @@
 const express = require('express');
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 
 const app = express();
 app.use(express.json());
 
 // Função para criar a conexão a partir de uma URL
-function createConnectionFromUrl(dbUrl) {
-    const connection = mysql.createConnection(dbUrl);
-    connection.connect((err) => {
-        if (err) {
-            console.error('Erro ao conectar ao banco de dados:', err.message);
-            return;
-        }
-        console.log('Conectado ao banco de dados com sucesso!');
-    });
-    return connection;
-}
-
-// URL do banco de dados
-const dbUrl = 'mysql://root:BMRDuvXMizkAQEayQRFqlJCBINrjvCgW@autorack.proxy.rlwy.net:37284/railway';
-
-// Criar conexão
-const db = createConnectionFromUrl(dbUrl);
-
-// Consultar dados como exemplo
-db.query('SELECT * FROM funcionarios', (err, results) => {
-    if (err) {
-        console.error('Erro ao executar a consulta:', err.message);
-    } else {
-        console.log('Resultados:', results);
-    }
-    db.end(); // Fecha a conexão após a consulta
+const db = mysql.createPool({
+  uri: 'mysql://root:BMRDuvXMizkAQEayQRFqlJCBINrjvCgW@autorack.proxy.rlwy.net:37284/railway',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
 // Função para validar email
@@ -110,7 +89,7 @@ async function deletarFuncionario(req, res) {
 // Obter todos os funcionários
 async function getFuncionarios(req, res) {
   try {
-    const [rows] = await db.execute('select id, nome, email from microservico_login');
+    const [rows] = await db.query('select id, nome, email from microservico_login');
     res.json(rows);
   } catch (err) {
     console.error('Erro ao obter funcionários:', err.message);
