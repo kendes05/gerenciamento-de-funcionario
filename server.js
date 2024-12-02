@@ -1,10 +1,26 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const db = require('./db');
-require('dotenv').config();
+const mysql = require('mysql2');
 
 const app = express();
 app.use(express.json());
+
+const db = mysql.createConnection({
+  host: 'autorack.proxy.rlwy.net',
+  port: 37284,
+  user: 'root',
+  password: 'BMRDuvXMizkAQEayQRFqlJCBINrjvCgW',
+  database: 'railway'
+});
+
+// Conectar ao banco de dados
+connection.connect((err) => {
+  if (err) {
+      console.error('Erro ao conectar ao banco de dados:', err.message);
+      return;
+  }
+  console.log('Conectado ao banco de dados com sucesso!');
+});
 
 // Função para validar email
 async function emailValido(email) {
