@@ -6,7 +6,7 @@ app.use(express.json());
 
 const db = mysql.createConnection({
   host: 'mysql.railway.internal',
-  port: 37284,
+  port: 3306,
   user: 'root',
   password: 'BMRDuvXMizkAQEayQRFqlJCBINrjvCgW',
   database: 'railway'
