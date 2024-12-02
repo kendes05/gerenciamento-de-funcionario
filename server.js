@@ -4,8 +4,6 @@ const mysql = require('mysql2');
 const app = express();
 app.use(express.json());
 
-const mysql = require('mysql2');
-
 // Função para criar a conexão a partir de uma URL
 function createConnectionFromUrl(dbUrl) {
     const connection = mysql.createConnection(dbUrl);
