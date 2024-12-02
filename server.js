@@ -48,7 +48,7 @@ async function atualizarFuncionario(req, res) {
     }
 
     const sql = 'update microservico_login set nome = ?, email = ? where email = ?';
-    await db.query(sql, [nome, novoEmail || email, email]);
+    await db.query(sql, [nome,novoEmail,email]);
 
     res.status(200).json({ message: 'Funcionário atualizado com sucesso.' });
   } catch (error) {
