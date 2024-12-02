@@ -14,33 +14,11 @@ async function emailValido(email) {
   }
 }
 
-async function cadastrarFuncionario(req, res) {
-  try {
-    const { nome, email } = req.body;
-
-    if (!nome || !email) {
-      return res.status(400).json({ message: 'Nome e email são obrigatórios.' });
-    }
-
-    const emailValidoBool = await emailValido(email);
-    if (!emailValidoBool) {
-      return res.status(400).json({ message: 'Email já em uso. Por favor, escolha outro email.' });
-    }
-
-    const sql = 'insert into microservico_login (nome, email, quantidade_vendas) VALUES (?, ?, 0)';
-    await db.query(sql, [nome, email]);
-
-    return res.status(201).json({ message: 'Funcionário cadastrado com sucesso!' });
-  } catch (err) {
-    console.error('Erro ao cadastrar funcionário:', err.message);
-    return res.status(500).json({ message: 'Erro ao cadastrar funcionário. Tente novamente mais tarde.' });
-  }
-}
 
 async function atualizarFuncionario(req, res) {
   const { email } = req.params;
   const { nome, novoEmail } = req.body;
-
+  
   try {
     const [rows] = await db.query('select * from microservico_login where email = ?', [email]);
     if (rows.length === 0) {
@@ -62,7 +40,7 @@ async function deletarFuncionario(req, res) {
 
   try {
     const [result] = await db.query('delete from microservico_login where email = ?', [email]);
-
+    
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: 'Funcionário não encontrado.' });
     }
@@ -86,13 +64,13 @@ async function getFuncionarios(req, res) {
 
 async function getFuncionariosByEmail(req, res) {
   const { email } = req.params;
-
+  
   try {
     const [rows] = await db.query('select * from microservico_login where email = ?', [email]);
     if (rows.length === 0) {
       return res.status(404).json({ message: 'Funcionário não encontrado.' });
     }
-
+    
     res.json(rows[0]);
   } catch (error) {
     console.error('Erro ao buscar funcionário:', error.message);
@@ -101,7 +79,27 @@ async function getFuncionariosByEmail(req, res) {
 }
 
 
-app.post('/api/cadastrar', cadastrarFuncionario);
+app.post('/api/cadastrar', async (req, res) => {
+  try {
+    const { nome, email } = req.body;
+
+    if (!nome || !email) {
+      return res.status(400).json({ message: 'Nome e email são obrigatórios.' });
+    }
+    const emailValidoBool = await emailValido(email);
+    if (!emailValidoBool) {
+      return res.status(400).json({ message: 'Email já em uso. Por favor, escolha outro email.' });
+    }
+    const sql = 'insert into microservico_login (nome, email, quantidade_vendas) VALUES (?, ?, 0)';
+    await db.query(sql, [nome, email]);
+
+    return res.status(201).json({ message: 'Funcionário cadastrado com sucesso!' });
+  } catch (err) {
+    console.error('Erro ao cadastrar funcionário:', err.message);
+    return res.status(500).json({ message: 'Erro ao cadastrar funcionário. Tente novamente mais tarde.' });
+  }
+});
+
 app.put('/api/funcionarios/:email', atualizarFuncionario);
 app.delete('/api/funcionarios/:email', deletarFuncionario);
 app.get('/api/funcionarios', getFuncionarios);
