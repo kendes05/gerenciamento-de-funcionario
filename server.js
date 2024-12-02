@@ -24,7 +24,7 @@ db.connect((err) => {
 // Função para validar email
 async function emailValido(email) {
   try {
-    const [rows] = await db.execute('select * from funcionarios where email = ?', [email]);
+    const [rows] = await db.execute('select * from microservico_login where email = ?', [email]);
     return rows.length === 0; // Retorna verdadeiro se o email não estiver em uso
   } catch (error) {
     console.error('Erro ao verificar email:', error.message);
@@ -62,7 +62,7 @@ async function atualizarFuncionario(req, res) {
   const { nome, novoEmail } = req.body;
 
   try {
-    const [rows] = await db.execute('select * from funcionarios where email = ?', [email]);
+    const [rows] = await db.execute('select * from microservico_login where email = ?', [email]);
     if (rows.length === 0) {
       return res.status(404).json({ message: 'Funcionário não encontrado.' });
     }
@@ -82,7 +82,7 @@ async function deletarFuncionario(req, res) {
   const { email } = req.params;
 
   try {
-    const [result] = await db.execute('delete from funcionarios where email = ?', [email]);
+    const [result] = await db.execute('delete from microservico_login where email = ?', [email]);
 
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: 'Funcionário não encontrado.' });
@@ -98,7 +98,7 @@ async function deletarFuncionario(req, res) {
 // Obter todos os funcionários
 async function getFuncionarios(req, res) {
   try {
-    const [rows] = await db.execute('select id, nome, email from funcionarios');
+    const [rows] = await db.execute('select id, nome, email from microservico_login');
     res.json(rows);
   } catch (err) {
     console.error('Erro ao obter funcionários:', err.message);
@@ -111,7 +111,7 @@ async function getFuncionariosByEmail(req, res) {
   const { email } = req.params;
 
   try {
-    const [rows] = await db.execute('select * from funcionarios where email = ?', [email]);
+    const [rows] = await db.execute('select * from microservico_login where email = ?', [email]);
     if (rows.length === 0) {
       return res.status(404).json({ message: 'Funcionário não encontrado.' });
     }
