@@ -5,7 +5,7 @@ const app = express();
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: 'autorack.proxy.rlwy.net',
+  host: 'mysql.railway.internal',
   port: 37284,
   user: 'root',
   password: 'BMRDuvXMizkAQEayQRFqlJCBINrjvCgW',
