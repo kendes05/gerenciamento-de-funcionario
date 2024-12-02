@@ -1,16 +1,9 @@
 const express = require('express');
-const mysql = require('mysql2/promise');
+const db = require('./db').getPool();
 
 const app = express();
 app.use(express.json());
-const db = mysql.createPool({
-  uri: 'mysql://root:BMRDuvXMizkAQEayQRFqlJCBINrjvCgW@autorack.proxy.rlwy.net:37284/railway',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-});
 
-// Função para validar email
 async function emailValido(email) {
   try {
     const [rows] = await db.query('select * from microservico_login where email = ?', [email]);
@@ -21,7 +14,6 @@ async function emailValido(email) {
   }
 }
 
-// Cadastrar funcionário
 async function cadastrarFuncionario(req, res) {
   try {
     const { nome, email } = req.body;
