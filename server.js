@@ -116,7 +116,7 @@ app.get('/api/funcionarios', getFuncionarios);
 app.get('/api/funcionarios/:email', getFuncionariosByEmail);
 
 // Inicializar servidor
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 37284;
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);
 });
