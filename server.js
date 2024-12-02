@@ -2,12 +2,11 @@ const express = require('express');
 const mysql = require('mysql2');
 
 const app = express();
-const port = 37284;
 app.use(express.json());
 
 const db = mysql.createConnection({
   host: 'autorack.proxy.rlwy.net',
-  port: 3306,
+  port: 37284,
   user: 'root',
   password: 'BMRDuvXMizkAQEayQRFqlJCBINrjvCgW',
   database: 'railway'
@@ -132,5 +131,7 @@ app.get('/api/funcionarios', getFuncionarios);
 app.get('/api/funcionarios/:email', getFuncionariosByEmail);
 
 // Inicializar servidor
+const port = process.env.PORT || 37284;
 app.listen(port, () => {
+  console.log(`Servidor rodando na porta ${port}`);
 });
